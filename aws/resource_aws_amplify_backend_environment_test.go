@@ -30,7 +30,7 @@ func TestAccAWSAmplifyBackendEnvironment_basic(t *testing.T) {
 				Config: testAccAWSAmplifyBackendEnvironmentConfig_Required(rName, envName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAWSAmplifyBackendEnvironmentExists(resourceName, &env1),
-					resource.TestMatchResourceAttr(resourceName, "arn", regexp.MustCompile("^arn:[^:]+:amplify:[^:]+:[^:]+:apps/[^/]+/backendenvironments/"+envName)),
+					testAccMatchResourceAttrRegionalARN(resourceName, "arn", "amplify", regexp.MustCompile("apps/[^/]+/backendenvironments/.+$")),
 					resource.TestCheckResourceAttr(resourceName, "environment_name", envName),
 					resource.TestMatchResourceAttr(resourceName, "deployment_artifacts", regexp.MustCompile(fmt.Sprintf("^tf-acc-test-.*-%s-.*-deployment$", envName))),
 					resource.TestMatchResourceAttr(resourceName, "stack_name", regexp.MustCompile(fmt.Sprintf("^amplify-tf-acc-test-.*-%s-.*$", envName))),
@@ -46,7 +46,7 @@ func TestAccAWSAmplifyBackendEnvironment_basic(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAWSAmplifyBackendEnvironmentExists(resourceName, &env2),
 					testAccCheckAWSAmplifyBackendEnvironmentRecreated(&env1, &env2),
-					resource.TestMatchResourceAttr(resourceName, "arn", regexp.MustCompile("^arn:[^:]+:amplify:[^:]+:[^:]+:apps/[^/]+/backendenvironments/"+envName)),
+					testAccMatchResourceAttrRegionalARN(resourceName, "arn", "amplify", regexp.MustCompile("apps/[^/]+/backendenvironments/.+$")),
 					resource.TestCheckResourceAttr(resourceName, "environment_name", envName),
 					resource.TestCheckResourceAttr(resourceName, "deployment_artifacts", rName),
 					resource.TestCheckResourceAttr(resourceName, "stack_name", rName),
