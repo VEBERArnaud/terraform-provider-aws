@@ -29,7 +29,7 @@ func TestAccAWSAmplifyDomainAssociation_basic(t *testing.T) {
 				Config: testAccAWSAmplifyDomainAssociationConfig_Required(rName, domainName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAWSAmplifyDomainAssociationExists(resourceName, &domain),
-					resource.TestMatchResourceAttr(resourceName, "arn", regexp.MustCompile("^arn:[^:]+:amplify:[^:]+:[^:]+:apps/[^/]+/domains/[^/]+$")),
+					testAccMatchResourceAttrRegionalARN(resourceName, "arn", "amplify", regexp.MustCompile("apps/[^/]+/domains/.+$")),
 					resource.TestCheckResourceAttr(resourceName, "domain_name", domainName),
 					resource.TestCheckResourceAttr(resourceName, "sub_domain_settings.#", "1"),
 					resource.TestCheckResourceAttr(resourceName, "sub_domain_settings.0.branch_name", "master"),
