@@ -26,7 +26,7 @@ func TestAccAWSAmplifyWebhook_basic(t *testing.T) {
 				Config: testAccAWSAmplifyWebhookConfig_Required(rName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAWSAmplifyWebhookExists(resourceName, &webhook),
-					resource.TestMatchResourceAttr(resourceName, "arn", regexp.MustCompile("^arn:[^:]+:amplify:[^:]+:[^:]+:apps/[^/]+/webhooks/[^/]+$")),
+					testAccMatchResourceAttrRegionalARN(resourceName, "arn", "amplify", regexp.MustCompile("apps/[^/]+/webhooks/.+$")),
 					resource.TestMatchResourceAttr(resourceName, "url", regexp.MustCompile("^https://webhooks.amplify.")),
 					resource.TestCheckResourceAttr(resourceName, "branch_name", "master"),
 					resource.TestCheckResourceAttr(resourceName, "description", ""),
