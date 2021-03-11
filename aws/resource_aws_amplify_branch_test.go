@@ -423,7 +423,7 @@ func testAccCheckAWSAmplifyBranchDestroy(s *terraform.State) error {
 
 func testAccCheckAWSAmplifyBranchRecreated(i, j *amplify.Branch) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-		if aws.TimeValue(i.CreateTime) == aws.TimeValue(j.CreateTime) {
+		if aws.TimeValue(i.CreateTime).Equal(aws.TimeValue(j.CreateTime)) {
 			return errors.New("Amplify Branch was not recreated")
 		}
 
