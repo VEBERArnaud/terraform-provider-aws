@@ -86,8 +86,9 @@ func resourceAwsAmplifyDomainAssociationCreate(d *schema.ResourceData, meta inte
 	log.Print("[DEBUG] Creating Amplify DomainAssociation")
 
 	params := &amplify.CreateDomainAssociationInput{
-		AppId:      aws.String(d.Get("app_id").(string)),
-		DomainName: aws.String(d.Get("domain_name").(string)),
+		AppId:             aws.String(d.Get("app_id").(string)),
+		DomainName:        aws.String(d.Get("domain_name").(string)),
+		SubDomainSettings: expandAmplifySubDomainSettings(d.Get("sub_domain_settings").([]interface{})),
 	}
 
 	if v, ok := d.GetOk("auto_sub_domain_creation_patterns"); ok && len(v.([]interface{})) > 0 {
@@ -100,10 +101,6 @@ func resourceAwsAmplifyDomainAssociationCreate(d *schema.ResourceData, meta inte
 
 	if v, ok := d.GetOk("enable_auto_sub_domain"); ok {
 		params.EnableAutoSubDomain = aws.Bool(v.(bool))
-	}
-
-	if v, ok := d.GetOk("sub_domain_settings"); ok {
-		params.SubDomainSettings = expandAmplifySubDomainSettings(v.([]interface{}))
 	}
 
 	resp, err := conn.CreateDomainAssociation(params)
@@ -167,8 +164,9 @@ func resourceAwsAmplifyDomainAssociationUpdate(d *schema.ResourceData, meta inte
 	domain_name := s[2]
 
 	params := &amplify.UpdateDomainAssociationInput{
-		AppId:      aws.String(app_id),
-		DomainName: aws.String(domain_name),
+		AppId:             aws.String(app_id),
+		DomainName:        aws.String(domain_name),
+		SubDomainSettings: expandAmplifySubDomainSettings(d.Get("sub_domain_settings").([]interface{})),
 	}
 
 	if d.HasChange("auto_sub_domain_creation_patterns") {
@@ -181,10 +179,6 @@ func resourceAwsAmplifyDomainAssociationUpdate(d *schema.ResourceData, meta inte
 
 	if d.HasChange("enable_auto_sub_domain") {
 		params.EnableAutoSubDomain = aws.Bool(d.Get("enable_auto_sub_domain").(bool))
-	}
-
-	if d.HasChange("sub_domain_settings") {
-		params.SubDomainSettings = expandAmplifySubDomainSettings(d.Get("sub_domain_settings").([]interface{}))
 	}
 
 	_, err := conn.UpdateDomainAssociation(params)
