@@ -118,7 +118,7 @@ func testAccCheckAWSAmplifyBackendEnvironmentDestroy(s *terraform.State) error {
 
 func testAccCheckAWSAmplifyBackendEnvironmentRecreated(i, j *amplify.BackendEnvironment) resource.TestCheckFunc {
 	return func(s *terraform.State) error {
-		if aws.TimeValue(i.CreateTime) == aws.TimeValue(j.CreateTime) {
+		if aws.TimeValue(i.CreateTime).Equal(aws.TimeValue(j.CreateTime)) {
 			return errors.New("Amplify BackendEnvironment was not recreated")
 		}
 
