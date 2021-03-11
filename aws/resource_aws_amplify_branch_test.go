@@ -31,7 +31,7 @@ func TestAccAWSAmplifyBranch_basic(t *testing.T) {
 				Config: testAccAWSAmplifyBranchConfig_Required(rName),
 				Check: resource.ComposeTestCheckFunc(
 					testAccCheckAWSAmplifyBranchExists(resourceName, &branch),
-					resource.TestMatchResourceAttr(resourceName, "arn", regexp.MustCompile("^arn:[^:]+:amplify:[^:]+:[^:]+:apps/[^/]+/branches/[^/]+$")),
+					testAccMatchResourceAttrRegionalARN(resourceName, "arn", "amplify", regexp.MustCompile("apps/[^/]+/branches/.+$")),
 					resource.TestCheckResourceAttr(resourceName, "branch_name", branchName),
 					resource.TestCheckResourceAttr(resourceName, "build_spec", ""),
 					resource.TestCheckResourceAttr(resourceName, "description", ""),
@@ -151,7 +151,7 @@ func TestAccAWSAmplifyBranch_backendEnvironment(t *testing.T) {
 			{
 				Config: testAccAWSAmplifyBranchConfigBackendEnvironment(rName),
 				Check: resource.ComposeTestCheckFunc(
-					resource.TestMatchResourceAttr(resourceName, "backend_environment_arn", regexp.MustCompile("^arn:[^:]+:amplify:[^:]+:[^:]+:apps/[^/]+/backendenvironments/prod")),
+					testAccMatchResourceAttrRegionalARN(resourceName, "backend_environment_arn", "amplify", regexp.MustCompile("apps/[^/]+/backendenvironments/prod$")),
 				),
 			},
 			{
